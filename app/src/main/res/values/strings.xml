@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CryptYourText</string>
+    <string name="enter_your_key">Enter your key</string>
+    <string name="enter_your_text">Enter your text</string>
+</resources>
