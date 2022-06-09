@@ -6,16 +6,28 @@ import kotlin.experimental.xor
 
 class CryptMessageUseCase {
 
-    fun execute (message: Message, key: Key) : Message {
-        val charset = Charsets.UTF_8
-        val outputBytes = ByteArray(message.messageText.length)
-        val inputBytes = message.messageText.toByteArray()
+    fun encrypt (messageObject: Message, key: Key): Message {
+        val originalBytes = messageObject.messageText.toByteArray()
+        val encryptedByteArray = originalBytes.copyOf()
         val keyBytes = key.keyText.toByteArray()
 
-        for (i in inputBytes.indices){
-            outputBytes[i] = (inputBytes[i] xor keyBytes[i%key.keyText.length])
+        for (i in originalBytes.indices){
+            encryptedByteArray[i] = originalBytes[i] xor keyBytes[i%keyBytes.size]
         }
 
-        return Message(outputBytes.toString(charset))
+        return Message(encryptedByteArray.joinToString())
     }
+
+    fun decrypt (messageObject: Message, key: Key): Message{
+        val cryptedListOfStrings = messageObject.messageText.split(", ")
+        val decryptedByteArray = ByteArray(cryptedListOfStrings.size)
+        var keyBytes = key.keyText.toByteArray()
+
+        for (i in cryptedListOfStrings.indices){
+            decryptedByteArray[i] = cryptedListOfStrings[i].toByte() xor keyBytes[i%keyBytes.size]
+        }
+
+        return Message(String(decryptedByteArray))
+    }
+
 }

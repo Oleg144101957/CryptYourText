@@ -32,7 +32,15 @@ class MainActivity : AppCompatActivity() {
         binding.btnCrypt.setOnClickListener {
             val key = Key(binding.keyEdit.text.toString())
             val message = Message(binding.msgEdit.text.toString())
-            val result: Message = cryptMessageUseCase.execute(message, key)
+            val result: Message = cryptMessageUseCase.encrypt(message, key)
+            binding.msgEdit.setText(result.messageText)
+
+        }
+
+        binding.btnDecrypt.setOnClickListener {
+            val key = Key(binding.keyEdit.text.toString())
+            val message = Message(binding.msgEdit.text.toString())
+            val result: Message = cryptMessageUseCase.decrypt(message, key)
             binding.msgEdit.setText(result.messageText)
 
         }
@@ -56,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnPaste.setOnClickListener {
-            val clipData = clipboard?.primaryClip
+            val clipData = clipboard.primaryClip
             val item = clipData?.getItemAt(0)
             binding.msgEdit.setText(item?.text)
 
