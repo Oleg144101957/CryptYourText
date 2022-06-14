@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.vishnevskiypro.cryptyourtext.databinding.ActivityMainBinding
 import com.vishnevskiypro.cryptyourtext.domain.models.Key
 import com.vishnevskiypro.cryptyourtext.domain.models.Message
@@ -30,6 +31,18 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.btnCrypt.setOnClickListener {
+
+            if(binding.msgEdit.text.isEmpty()){
+                Toast.makeText(this, "Enter Your Text", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (binding.keyEdit.text.isEmpty()){
+                Toast.makeText(this, "Enter Your Key", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+
             val key = Key(binding.keyEdit.text.toString())
             val message = Message(binding.msgEdit.text.toString())
             val result: Message = cryptMessageUseCase.encrypt(message, key)
@@ -38,6 +51,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnDecrypt.setOnClickListener {
+
+            if(binding.msgEdit.text.isEmpty()){
+                Toast.makeText(this, "Enter Your Text", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (binding.keyEdit.text.isEmpty()){
+                Toast.makeText(this, "Enter Your Key", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val key = Key(binding.keyEdit.text.toString())
             val message = Message(binding.msgEdit.text.toString())
             val result: Message = cryptMessageUseCase.decrypt(message, key)
@@ -61,12 +85,14 @@ class MainActivity : AppCompatActivity() {
             val message = Message(binding.msgEdit.text.toString())
             val clip = ClipData.newPlainText("copy text", message.messageText)
             clipboard.setPrimaryClip(clip)
+            Toast.makeText(this, "Copied", Toast.LENGTH_SHORT).show()
         }
 
         binding.btnPaste.setOnClickListener {
             val clipData = clipboard.primaryClip
             val item = clipData?.getItemAt(0)
             binding.msgEdit.setText(item?.text)
+            Toast.makeText(this, "Pasted", Toast.LENGTH_SHORT).show()
 
         }
     }
